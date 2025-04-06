@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fraud Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            color: #444;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            grid-column: 1 / -1;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results, .error {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .results {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fraud Detection System</h1>
+        <form method="post">
+            {% for feature in ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9',
+                               'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18',
+                               'V19', 'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27',
+                               'V28', 'Amount'] %}
+                <label>{{ feature }}
+                    <input type="number" name="{{ feature }}" step="any" required>
+                </label>
+            {% endfor %}
+            <button type="submit">Check Fraud</button>
+        </form>
+
+        {% if rf_prob %}
+            <div class="results">
+                <h2>Prediction Results</h2>
+                <p><strong>Random Forest Fraud Probability:</strong> {{ rf_prob }}%</p>
+                <p><strong>Autoencoder Anomaly Score:</strong> {{ ae_prob }}%</p>
+                <p><strong>Top Features Impacting Random Forest Decision:</strong></p>
+                <ul>
+                    {% for feature, importance in top_features %}
+                        <li>{{ feature }}: {{ importance | round(4) }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error">
+                <p><strong>Error:</strong> {{ error }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
